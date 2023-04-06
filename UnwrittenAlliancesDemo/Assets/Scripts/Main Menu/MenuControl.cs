@@ -10,6 +10,8 @@ public class MenuControl : MonoBehaviour
 {
     private static MenuControl instance;
 
+    public static bool MouseInvert = false;
+
     public static MenuControl MyInstance
     {
         get
@@ -86,6 +88,11 @@ public class MenuControl : MonoBehaviour
         resolitionDropdown.RefreshShownValue();
     }
 
+    public void SetInvertMouse(bool fino)
+    {
+        MouseInvert = fino;
+    }
+
     public void Setresolucion(int resolucionIndex)
     {
         Resolution resolution = resolutions[resolucionIndex];
@@ -94,6 +101,7 @@ public class MenuControl : MonoBehaviour
 
     public void NewGameDialogYes()
     {
+        new WaitForSeconds(1);
         SceneManager.LoadScene(_NewGameSampleScene);
 
     }

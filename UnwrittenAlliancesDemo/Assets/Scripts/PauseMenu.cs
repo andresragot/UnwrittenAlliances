@@ -5,10 +5,30 @@ using UnityEngine.SceneManagement;
 
 public class PauseMenu : MonoBehaviour
 {
+    private static PauseMenu Instance;
+
     public static bool GameIsPaused = false;
 
     public GameObject pauseMenuUI;
 
+    public static Scene scene;
+
+    private void Start()
+    {
+        Instance = this;
+    }
+
+    public static PauseMenu MyInstance
+    {
+        get
+        {
+            if (Instance == null)
+            {
+                Instance = FindObjectOfType<PauseMenu>();
+            }
+            return Instance;
+        }
+    }
     // Update is called once per frame
     void Update()
     {
@@ -45,11 +65,44 @@ public class PauseMenu : MonoBehaviour
     {
 
         Time.timeScale = 1f;
-        SceneManager.LoadScene("MainMenu");
+        SceneManager.LoadScene("MenuMapa");
     }
 
     public void QuitGame()
     {
         Application.Quit();
+    }
+
+    public void GanarUno()
+    {
+        SceneManager.LoadScene("MenuMapa");
+        MenuMapa.nivelDos = true;
+    }
+
+    public void GanarDos()
+    {
+        SceneManager.LoadScene("MenuMapa");
+        MenuMapa.nivelTres = true;
+    }
+
+    public void GanarTres()
+    {
+        SceneManager.LoadScene("MenuMapa");
+        MenuMapa.nivelCuatro = true;
+    }
+
+    public void GanarCuatro()
+    {
+        SceneManager.LoadScene("MenuMapa");
+    }
+
+    public void Retry(GameObject ventana)
+    {
+        Time.timeScale = 1;
+
+        ventana.SetActive(false);
+        scene = SceneManager.GetActiveScene();
+
+        SceneManager.LoadScene(scene.name);
     }
 }

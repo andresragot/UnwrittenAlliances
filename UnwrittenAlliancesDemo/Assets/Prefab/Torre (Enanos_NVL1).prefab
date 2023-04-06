@@ -10,7 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 4455353062165674239}
   - component: {fileID: 3972873700158173356}
-  - component: {fileID: 6550182540071990643}
+  - component: {fileID: -8507971882142037604}
+  - component: {fileID: 298770924177458051}
   m_Layer: 0
   m_Name: Torre (Enanos_NVL1)
   m_TagString: Untagged
@@ -27,7 +28,7 @@ Transform:
   m_GameObject: {fileID: 2017627390607282284}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -24.41, y: 2.2059402, z: 0}
-  m_LocalScale: {x: 5.1652, y: 5.1652, z: 5.1652}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 842682120292007300}
   m_Father: {fileID: 0}
@@ -85,7 +86,7 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &6550182540071990643
+--- !u!114 &-8507971882142037604
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -94,14 +95,46 @@ MonoBehaviour:
   m_GameObject: {fileID: 2017627390607282284}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: df6a65b9ba7e2b04e9ab1ac6aab4399d, type: 3}
+  m_Script: {fileID: 11500000, guid: b64854086c5629440b946ff85be73ebc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  human: {fileID: 0}
+  sprites:
+  - {fileID: 21300000, guid: 63eb720e796cdce48bec44e08a7f1fde, type: 3}
+  - {fileID: 21300000, guid: f85e1a2d3b25b2e4ab9b4071b1296b0b, type: 3}
+  - {fileID: 21300000, guid: f2ac4cb3977126f468213998122d87a0, type: 3}
   target: {fileID: 0}
-  range: 4.2
+  Range: 15
   fireRate: 1
-  bulletPrefab: {fileID: 0}
+  valor_actual: 100
+  bulletPrefab: {fileID: 4886048854004354583, guid: c9d0dd147436b5f4f8037ec6ed94adda, type: 3}
   firePoint: {fileID: 842682120292007300}
+--- !u!61 &298770924177458051
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2017627390607282284}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 2, y: 2}
+    newSize: {x: 0.32, y: 0.32}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 2, y: 2}
+  m_EdgeRadius: 0
 --- !u!1 &9092428321191897627
 GameObject:
   m_ObjectHideFlags: 0
@@ -126,7 +159,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9092428321191897627}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.144, z: 0}
+  m_LocalPosition: {x: 0, y: -0.87, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4455353062165674239}

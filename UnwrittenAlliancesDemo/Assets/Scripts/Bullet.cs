@@ -4,7 +4,9 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
-    private Transform target;
+    public float Damage;
+
+    protected Transform target;
     public float speed = 50f;
     
     public void Seek(Transform tg)
@@ -29,6 +31,9 @@ public class Bullet : MonoBehaviour
         Vector3 dir = target.position - transform.position;
         float distanceThisFrame = speed * Time.deltaTime;
 
+        transform.up = new Vector3(dir.x, dir.y, 0);
+
+
         //if(dir.magnitude <= distanceThisFrame)
         //{
         //    HitTarget();
@@ -37,14 +42,14 @@ public class Bullet : MonoBehaviour
         transform.Translate(dir.normalized * distanceThisFrame, Space.World);
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
+    protected void OnTriggerEnter2D(Collider2D collision)
     {
         if(collision.tag == "Enemigo")
         {
             Destroy(gameObject);
             Enemigo enemigo = target.GetComponent<Enemigo>();
-            enemigo.vida--;
-            Debug.Log(enemigo.vida);
+            enemigo.TakeHit(Damage);
+
         }
     }
 

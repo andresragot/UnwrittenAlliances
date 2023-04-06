@@ -4,115 +4,108 @@ using UnityEngine;
 
 public class HumanoPruebaEnemigo : MonoBehaviour
 {
+    Animator anim;
+
     enum States { patrol, pursuit }
 
-    States state = States.patrol;
+    States status = States.patrol;
 
-    public int vida = 500;
+    public float vida = 500, damage = 1, Range = 2f, timePunch = 1f;
 
-    private bool atacando = false;
-    private Enemigo enemigo;
+    private Enemigo[] enemigos;
     public const int VIDA_MAXIMA = 3;
 
+
+
+    public LayerMask mascaraEnemigo;
+
     private Transform target;
-    //private int wavepointIndex = 0;
-    //[SerializeField]
-    int speed = 3;
+    
     [SerializeField]
-    Transform spawn;
+    int speed = 1;
+    
 
     public int waypointIndex;
+
+    [SerializeField]
+    AudioSource[] audios, pisadas;
 
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, 1f);
-        //Gizmos.DrawWireSphere(target.position, 1f);
+        Gizmos.DrawWireSphere(transform.position, Range);
     }
 
     private void Start()
     {
         GetNearWaypoint();
+        InvokeRepeating("EnviarAtacar", 0f, 1f);
+        anim = GetComponent<Animator>();
+        audios[0].Play();
     }
     private void Update()
     {
-        var ob = Physics2D.CircleCast(transform.position, 1f, Vector2.up);
-        if (state == States.pursuit)
-        {
-            target = ob.collider.transform;
-            if (Vector3.Distance(target.position, transform.position) > 1f)
-            {
-                target = transform;
-                state = States.patrol;
-                return;
-            }
-        }
-        else if (state == States.patrol)
+        DetectarEnemigo();
+
+      
+        if (status == States.patrol)
         {
             Mover();
-            if (ob.collider != null)
-            {
-                if (ob.collider.CompareTag("Enemigo"))
-                {
-                    state = States.pursuit;
-                    return;
-                }
-            }
         }
-        //  Mover();
         if (vida <= 0)
         {
+            audios[1].Play();
+            new WaitForSeconds(audios[1].time);
             Destroy(gameObject);
-            atacando = false;
         }
-        if (atacando)
+    }
+
+    private void EnviarAtacar()
+    {
+        if(status != States.pursuit)
         {
-            StartCoroutine(Atacar());
+            return;
         }
-        if (enemigo != null)
-        {
-            if (enemigo.vida <= 0)
-            {
-                atacando = false;
-            }
-        }
+        anim.SetTrigger("ataque");
     }
     
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        if (collision.collider.tag == "Enemigo")
-        {
-            atacando = true;
-            enemigo = collision.gameObject.GetComponent<Enemigo>();
-            if (enemigo.vida <= 0)
-            {
-                atacando = false;
-                //while (vida < VIDA_MAXIMA)
-                //{
-                //    vida++;
-
-                //}
-            }
-        }
-    }
-
-
     void Mover()
     {
         Vector3 distanciaWP=Vector3.zero;
         if (waypointIndex != -1)
         {
-            distanciaWP = Waypoints.points[waypointIndex - 1].position;
-            Vector3 dir = target.position - distanciaWP;
+
+            anim.SetBool("Patrol", true);
+            Vector3 dir = target.position -transform.position;
+
+
+            //transform.up = new Vector3(dir.x, dir.y, 0);
+
             transform.Translate(dir.normalized * speed * Time.deltaTime, Space.World);
+
+            float random = Random.value;
+            if (random < 0.25)
+                pisadas[0].Play();
+            else if (random < 0.50)
+            {
+                pisadas[1].Play();
+            }
+            else if (random < 0.75)
+            {
+                pisadas[2].Play();
+            }
+            else
+            {
+                pisadas[3].Play();
+            }
         }
-        if (Vector3.Distance(transform.position, distanciaWP) <= 1f /*&& speed != 0*/)
+        if (Vector3.Distance(transform.position, target.position) <= 0.3f)
         {
+            anim.SetBool("Patrol", false);
             speed = 0;
             waypointIndex = -1;
         }
     }
-
 
     void GetNearWaypoint()
     {
@@ -120,25 +113,29 @@ public class HumanoPruebaEnemigo : MonoBehaviour
         Transform shortestWaypoint = null;
         foreach(Transform tf in Waypoints.points)
         {
-            float distanceToWP = Vector3.Distance(spawn.position, tf.position);
+            float distanceToWP = Vector3.Distance(transform.position, tf.position);
             if (distanceToWP < shortestDistance)
             {
                 shortestDistance = distanceToWP;
                 shortestWaypoint = tf;
             }
         }
+
+        foreach(Transform ft in Waypoints2.points2)
+        {
+            float distancToWP = Vector3.Distance(transform.position, ft.position);
+            if(distancToWP < shortestDistance)
+            {
+                shortestDistance = distancToWP;
+                shortestWaypoint = ft;
+            }
+        }
         target = shortestWaypoint;
         waypointIndex = System.Array.IndexOf(Waypoints.points, target);
-
-
-
-        //if (wavepointIndex >= Waypoints.points.Length)
-        //{
-        //    Destroy(gameObject);
-        //    return;
-        //}
-        //wavepointIndex++;
-        //target = Waypoints.points[wavepointIndex];
+        if(waypointIndex == -1)
+        {
+            waypointIndex = System.Array.IndexOf(Waypoints2.points2, target);
+        }
     }
 
     public void Seek(Transform transform)
@@ -146,9 +143,45 @@ public class HumanoPruebaEnemigo : MonoBehaviour
 
     }
 
-    IEnumerator Atacar()
+    private void Atacar()
     {
-        enemigo.vida--;
-        yield return new WaitForSeconds(0.5f);
+        foreach(Enemigo enemigo in enemigos)
+        {
+            enemigo.TakeHit(damage);
+        }
+
+        audios[3].Play();
     }
+
+    public IEnumerator WaitSeconds(float time)
+    {
+        yield return new WaitForSeconds(time);
+    }
+
+    public void TakeHit(float danho)
+    {
+        vida -= danho;
+    }
+
+    public void DetectarEnemigo()
+    {
+        Collider2D[] hitColliders = Physics2D.OverlapCircleAll(transform.position, Range, mascaraEnemigo);
+        int index = 0;
+        enemigos = new Enemigo[hitColliders.Length];
+        foreach(Collider2D hit in hitColliders)
+        {
+            if(hit.tag == "Enemigo")
+            {
+                Enemigo enemigo = hit.gameObject.GetComponent<Enemigo>();
+                enemigos[index] = enemigo;
+                status = States.pursuit;
+                index++;
+            }
+        }
+        if(index == 0)
+        {
+            status = States.patrol;
+        }
+    }
+
 }

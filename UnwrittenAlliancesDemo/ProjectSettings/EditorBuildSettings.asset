@@ -5,15 +5,24 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 0
-    path: Assets/Scenes/SampleScene.unity
-    guid: 2cda990e2423bbf4892e6590ba056729
   - enabled: 1
     path: Assets/Scenes/MainMenu.unity
     guid: 5d5e49ad68a58ce47ab6401b119602bf
   - enabled: 1
-    path: Assets/Scenes/Prueba Enemigos.unity
-    guid: a7a3eb5a82fd78c45a67a4cc1239bee9
+    path: Assets/Scenes/MenuMapa.unity
+    guid: 1ac932e73f8a2414db687f57532c3276
+  - enabled: 1
+    path: Assets/Scenes/Nivel 1.unity
+    guid: a52e8fe5b9bc4a44a9114c2db00f7cdd
+  - enabled: 1
+    path: Assets/Scenes/Nivel 2.unity
+    guid: f5d08329c293eac49930cf372533ac4c
+  - enabled: 1
+    path: Assets/Scenes/Nivel 3.unity
+    guid: be749667b0eb5c647837556baf6b163a
+  - enabled: 1
+    path: Assets/Scenes/NivelTutorial.unity
+    guid: 73b26993809040346877fc93d6efaf62
   m_configObjects:
-    com.unity.adaptiveperformance.loader_settings: {fileID: 11400000, guid: 8d6f06dad2d70a643a0a9f76d64967ce, type: 2}
-    com.unity.adaptiveperformance.simulator.provider_settings: {fileID: 11400000, guid: 796502baf833bb544b849ce3775a1993, type: 2}
+    com.unity.adaptiveperformance.loader_settings: {fileID: 11400000, guid: 151958d066bf57548b6f987717f45ecd, type: 2}
+    com.unity.adaptiveperformance.simulator.provider_settings: {fileID: 11400000, guid: fc16778ffbe49ac4a84f48a928eaabd8, type: 2}
